@@ -21,7 +21,7 @@ Player *player_create(const char *name) {
     p->x           = 0;
     p->y           = 0;
 
-    int start[INVENTORY_SIZE] = {
+    ItemType start[INVENTORY_SIZE] = {
         ITEM_EMPTY, ITEM_WOOD, ITEM_STONE, ITEM_SEEDS,
         ITEM_BERRIES, ITEM_WATER, ITEM_SAND, ITEM_STICK,
         ITEM_COAL, ITEM_BARK
