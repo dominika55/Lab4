@@ -24,6 +24,12 @@ typedef enum ItemType {
 } ItemType;
 
 
+typedef struct GameTime {
+    int day;
+    int hour;
+} GameTime;
+
+
 typedef struct Player {
     char     name[STR_NAME_LEN];
     int      hp;
@@ -39,5 +45,12 @@ typedef struct Player {
 
 Player *player_create(const char *name);
 void    player_destroy(Player *p);
+
+
+GameTime *time_create(void);
+void      time_destroy(GameTime *t);
+void      time_print(const GameTime *t);
+int       time_wait(GameTime *t, int hours);
+void      time_sleep(GameTime *t, Player *p);
 
 #endif // PLAYER_H
