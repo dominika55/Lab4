@@ -107,3 +107,38 @@ void time_sleep(GameTime *t, Player *p) {
     printf("Вы поспали. День %d, %02d:00.\n", t->day, t->hour);
     if (p != NULL) printf("HP и выносливость полностью восстановлены.\n");
 }
+
+
+const char *item_name(ItemType t) {
+    switch (t) {
+        case ITEM_EMPTY:   return "пусто";
+        case ITEM_WOOD:    return "дерево";
+        case ITEM_STONE:   return "камень";
+        case ITEM_SEEDS:   return "семена";
+        case ITEM_BERRIES: return "ягоды";
+        case ITEM_WATER:   return "вода";
+        case ITEM_SAND:    return "песок";
+        case ITEM_STICK:   return "палка";
+        case ITEM_COAL:    return "уголь";
+        case ITEM_BARK:    return "кора";
+        default:           return "неизвестный предмет";
+    }
+}
+
+void player_print_card(const Player *p) {
+    if (p == NULL) {
+        printf("Персонаж не создан.\n");
+        return;
+    }
+
+    printf("\n Карточка персонажа \n");
+    printf("Имя:          %s\n", p->name);
+    printf("HP:           %d/%d\n", p->hp, p->max_hp);
+    printf("Выносливость: %d/%d\n", p->stamina, p->max_stamina);
+    printf("Золото:       %d\n", p->gold);
+    printf("Позиция:      (%d, %d)\n", p->x, p->y);
+    printf("Инвентарь:\n");
+    for (int i = 0; i < INVENTORY_SIZE; ++i) {
+        printf("  [%d] %s\n", i, item_name(p->inventory[i]));
+    }
+}
