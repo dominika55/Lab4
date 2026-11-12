@@ -53,4 +53,7 @@ void      time_print(const GameTime *t);
 int       time_wait(GameTime *t, int hours);
 void      time_sleep(GameTime *t, Player *p);
 
+void player_print_card(const Player *p);
+const char *item_name(ItemType t);
+
 #endif // PLAYER_H
