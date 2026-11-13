@@ -1,4 +1,5 @@
 #include "player.h"
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -140,5 +141,68 @@ void player_print_card(const Player *p) {
     printf("Инвентарь:\n");
     for (int i = 0; i < INVENTORY_SIZE; ++i) {
         printf("  [%d] %s\n", i, item_name(p->inventory[i]));
+    }
+}
+
+void player_print_inventory(const Player *p) {
+    if (p == NULL) return;
+
+    printf("Инвентарь:\n");
+    for (int i = 0; i < INVENTORY_SIZE; ++i) {
+        printf("  Слот %d: [%d] (%s)\n",
+               i, p->inventory[i], item_name(p->inventory[i]));
+    }
+}
+
+void player_put_item(Player *p) {
+    if (p == NULL) return;
+
+    int index = read_int_safe("Индекс слота (0..9): ", 0, INVENTORY_SIZE - 1);
+    int id    = read_int_safe("ID предмета (0..9): ", 0, ITEM_COUNT - 1);
+
+    p->inventory[index] = (ItemType)id;
+    printf("Слот %d: теперь %s\n", index, item_name((ItemType)id));
+}
+
+void player_drop_item(Player *p) {
+    if (p == NULL) return;
+
+    int index = read_int_safe("Индекс слота (0..9): ", 0, INVENTORY_SIZE - 1);
+    p->inventory[index] = ITEM_EMPTY;
+    printf("Слот %d очищен\n", index);
+}
+
+void player_remove_duplicates(Player *p) {
+    if (p == NULL) return;
+
+    int seen[ITEM_COUNT] = {0};
+
+    for (int i = 0; i < INVENTORY_SIZE; ++i) {
+        if (p->inventory[i] == ITEM_EMPTY) continue;
+
+        if (seen[p->inventory[i]] == 1) {
+            p->inventory[i] = ITEM_EMPTY;
+        } else {
+            seen[p->inventory[i]] = 1;
+        }
+    }
+    printf("Дубликаты удалены.\n");
+}
+
+void player_search_item(const Player *p) {
+    if (p == NULL) return;
+
+    char name[STR_NAME_LEN];
+    read_line_safe(name, STR_NAME_LEN, "Введите название предмета: ");
+
+    int count = 0;
+    for (int i = 0; i < INVENTORY_SIZE; ++i) {
+        if (strcmp(item_name(p->inventory[i]), name) == 0) {
+            printf("Слот %d: %s\n", i, item_name(p->inventory[i]));
+            count++;
+        }
+    }
+    if (count == 0) {
+        printf("Такого предмета нет\n");
     }
 }
