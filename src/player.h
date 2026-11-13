@@ -46,7 +46,6 @@ typedef struct Player {
 Player *player_create(const char *name);
 void    player_destroy(Player *p);
 
-
 GameTime *time_create(void);
 void      time_destroy(GameTime *t);
 void      time_print(const GameTime *t);
@@ -55,5 +54,11 @@ void      time_sleep(GameTime *t, Player *p);
 
 void player_print_card(const Player *p);
 const char *item_name(ItemType t);
+
+void player_print_inventory(const Player *p);
+void player_put_item(Player *p);
+void player_drop_item(Player *p);
+void player_remove_duplicates(Player *p);
+void player_search_item(const Player *p);
 
 #endif // PLAYER_H
