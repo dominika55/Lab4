@@ -8,6 +8,11 @@
 #define PLAYER_MAX_STAMINA   50
 #define PLAYER_START_GOLD    0
 
+#define BUFF_CHANCE_PERCENT   5
+#define BUFF_DURATION_TURNS   10
+#define POISON_HP_PER_STEP    2
+#define STRAIN_STAMINA_X2     2
+
 
 typedef enum ItemType {
     ITEM_EMPTY = 0,
@@ -23,6 +28,20 @@ typedef enum ItemType {
     ITEM_COUNT         
 } ItemType;
 
+
+typedef enum StatusEffect {
+    STATUS_HEALTHY = 0,
+    STATUS_STRAIN,
+    STATUS_POISON,
+    STATUS_VIGOR,
+    STATUS_COUNT
+} StatusEffect;
+
+
+typedef struct Buff {
+    StatusEffect type;
+    int          turns_left;
+} Buff;
 
 typedef struct GameTime {
     int day;
@@ -40,6 +59,7 @@ typedef struct Player {
     int      x;
     int      y;
     ItemType inventory[INVENTORY_SIZE];
+    Buff     buff;
 } Player;
 
 
@@ -60,5 +80,10 @@ void player_put_item(Player *p);
 void player_drop_item(Player *p);
 void player_remove_duplicates(Player *p);
 void player_search_item(const Player *p);
+
+void buff_init(Buff *b);
+void buff_apply(Buff *b, StatusEffect type);
+void buff_tick(Buff *b);
+const char *buff_name(StatusEffect type);
 
 #endif // PLAYER_H
