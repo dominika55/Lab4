@@ -27,6 +27,8 @@ Player *player_create(const char *name) {
     p->x           = 0;
     p->y           = 0;
 
+    buff_init(&p->buff);
+
     ItemType start[INVENTORY_SIZE] = {
         ITEM_EMPTY, ITEM_WOOD, ITEM_STONE, ITEM_SEEDS,
         ITEM_BERRIES, ITEM_WATER, ITEM_SAND, ITEM_STICK,
@@ -104,6 +106,7 @@ void time_sleep(GameTime *t, Player *p) {
     if (p != NULL) {
         p->hp      = p->max_hp;
         p->stamina = p->max_stamina;
+        buff_init(&p->buff); 
     }
     printf("Вы поспали. День %d, %02d:00.\n", t->day, t->hour);
     if (p != NULL) printf("HP и выносливость полностью восстановлены.\n");
@@ -138,6 +141,13 @@ void player_print_card(const Player *p) {
     printf("Выносливость: %d/%d\n", p->stamina, p->max_stamina);
     printf("Золото:       %d\n", p->gold);
     printf("Позиция:      (%d, %d)\n", p->x, p->y);
+    
+    printf("Эффект:       %s", buff_name(p->buff.type));
+    if (p->buff.type != STATUS_HEALTHY) {
+        printf(" (%d шагов)", p->buff.turns_left);
+    }
+    printf("\n");
+    
     printf("Инвентарь:\n");
     for (int i = 0; i < INVENTORY_SIZE; ++i) {
         printf("  [%d] %s\n", i, item_name(p->inventory[i]));
@@ -204,5 +214,38 @@ void player_search_item(const Player *p) {
     }
     if (count == 0) {
         printf("Такого предмета нет\n");
+    }
+}
+
+void buff_init(Buff *b) {
+    if (b == NULL) return;
+    b->type = STATUS_HEALTHY;
+    b->turns_left = 0;
+}
+
+void buff_apply(Buff *b, StatusEffect type) {
+    if (b == NULL) return;
+    if (type <= STATUS_HEALTHY || type >= STATUS_COUNT) return;
+    b->type = type;
+    b->turns_left = BUFF_DURATION_TURNS;
+}
+
+void buff_tick(Buff *b) {
+    if (b == NULL) return;
+    if (b->type == STATUS_HEALTHY) return;
+    b->turns_left--;
+    if (b->turns_left <= 0) {
+        b->type = STATUS_HEALTHY;
+        b->turns_left = 0;
+    }
+}
+
+const char *buff_name(StatusEffect type) {
+    switch (type) {
+        case STATUS_HEALTHY: return "Здоров";
+        case STATUS_STRAIN:  return "Растяжение";
+        case STATUS_POISON:  return "Отравление";
+        case STATUS_VIGOR:   return "Бодрость";
+        default:             return "Неизвестный эффект";
     }
 }
