@@ -9,11 +9,15 @@
 #define STAIR_COST      5
 #define STEP_COST       1
 
+#define OBSTACLE_MIN    15
+#define OBSTACLE_MAX    30
+
 
 typedef enum TileType {
-    TILE_GRASS = 0,
-    TILE_FOREST,
-    TILE_WATER,
+    TILE_WALL = 0,
+    TILE_EMPTY,
+    TILE_TREE,
+    TILE_ROCK,
     TILE_EXIT,
     TILE_COUNT
 } TileType;
