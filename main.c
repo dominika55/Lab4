@@ -144,8 +144,8 @@ void menu_adventure(Player *player, GameTime *time) {
     }
 
     map_generate(map);
-    player->x = 0;
-    player->y = 0;
+    player->x = MAP_WIDTH / 2;
+    player->y = MAP_HEIGHT / 2;
 
     while (1) {
         map_print(map, player, time);
@@ -169,6 +169,7 @@ void menu_adventure(Player *player, GameTime *time) {
             if (player->stamina == 0) {
                 player->stamina = MIN_STAMINA;
             }
+            buff_init(&player->buff);
             break;
         }
     }
